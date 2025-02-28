@@ -1,6 +1,5 @@
 package ru.otus.hw.dao;
 
-import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 import lombok.RequiredArgsConstructor;
 import ru.otus.hw.config.TestFileNameProvider;
@@ -18,19 +17,15 @@ public class CsvQuestionDao implements QuestionDao {
 
     @Override
     public List<Question> findAll() {
-        // Использовать CsvToBean
-        // https://opencsv.sourceforge.net/#collection_based_bean_fields_one_to_many_mappings
-        // Использовать QuestionReadException
-        // Про ресурсы: https://mkyong.com/java/java-read-a-file-from-resources-folder/
-        try (var is = CsvQuestionDao.class.getResourceAsStream(fileNameProvider.getTestFileName());
-             var reader = new InputStreamReader(is)) {
-            CsvToBean<QuestionDto> csvToBean = new CsvToBeanBuilder<QuestionDto>(reader)
+        try (var resourceStream = CsvQuestionDao.class.getResourceAsStream(fileNameProvider.getTestFileName());
+             var reader = new InputStreamReader(resourceStream)) {
+            List<QuestionDto> csvToBean = new CsvToBeanBuilder<QuestionDto>(reader)
                     .withSkipLines(1)
                     .withSeparator(';')
                     .withType(QuestionDto.class)
-                    .build();
-            var parseCsv = csvToBean.parse();
-            return parseCsv.stream().map(QuestionDto::toDomainObject).toList();
+                    .build()
+                    .parse();
+            return csvToBean.stream().map(QuestionDto::toDomainObject).toList();
         } catch (IOException e) {
             throw new QuestionReadException(e.getMessage());
         }
