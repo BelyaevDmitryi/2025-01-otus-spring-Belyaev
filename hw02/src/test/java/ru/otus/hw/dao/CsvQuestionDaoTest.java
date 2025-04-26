@@ -2,26 +2,26 @@ package ru.otus.hw.dao;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-import java.io.IOException;
+import org.mockito.Mockito;
+import ru.otus.hw.config.AppProperties;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class CsvQuestionDaoTest {
-    private ApplicationContext context;
+
+    private QuestionDao dao;
 
     @BeforeEach
     void setUp() {
-         context = new ClassPathXmlApplicationContext("/spring-context.xml");
+        AppProperties appProperties = Mockito.mock(AppProperties.class);
+        Mockito.when(appProperties.getTestFileName()).thenReturn("questions.csv");
+        dao = new CsvQuestionDao(appProperties);
     }
 
     @Test
-    void testCsvQuestionDao() throws IOException {
-        QuestionDao questionDao = context.getBean(CsvQuestionDao.class);
-        assertNotNull(questionDao);
-        assertEquals(3, questionDao.findAll().size());
+    void testCsvQuestionDao() {
+        assertNotNull(dao);
+        assertEquals(3, dao.findAll().size());
     }
 }
