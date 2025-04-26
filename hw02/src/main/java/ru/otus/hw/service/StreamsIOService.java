@@ -11,7 +11,9 @@ import java.util.Scanner;
 public class StreamsIOService implements IOService {
 
     private static final int MAX_ATTEMPTS = 10;
+
     private final PrintStream printStream;
+
     private final Scanner scanner;
 
     public StreamsIOService(@Value("#{T(System).out}") PrintStream printStream,
@@ -20,11 +22,6 @@ public class StreamsIOService implements IOService {
         this.printStream = printStream;
         this.scanner = new Scanner(inputStream);
     }
-
-//    public StreamsIOService(PrintStream printStream) {
-//
-//        this.printStream = printStream;
-//    }
 
     @Override
     public void printLine(String s) {
