@@ -26,6 +26,8 @@ public class TestServiceImpl implements TestService {
         for (var question: questions) {
             var isAnswerValid = false;
             var answersCount = question.answers().size();
+            ioService.printLineLocalized("TestService.question");
+            ioService.printLine(question.text());
             var answerIndex = ioService.readIntForRangeWithPromptLocalized(1, answersCount,
                     "TestService.input.answer", "TestService.input.error");
             var answer = question.answers().get(answerIndex - 1);
