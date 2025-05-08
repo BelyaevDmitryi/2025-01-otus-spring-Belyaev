@@ -1,24 +1,22 @@
 package ru.otus.hw.config;
 
 import lombok.Getter;
-import lombok.ToString;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.bind.ConstructorBinding;
 
 import java.util.Locale;
 import java.util.Map;
 
-@ToString
 @ConfigurationProperties(prefix = "test")
 public class AppProperties implements TestConfig, TestFileNameProvider, LocaleConfig {
 
     @Getter
-    private int rightAnswersCountToPass;
+    private final int rightAnswersCountToPass;
 
     @Getter
     private Locale locale;
 
-    private Map<String, String> fileNameByLocaleTag;
+    private final Map<String, String> fileNameByLocaleTag;
 
     @ConstructorBinding
     public AppProperties(
