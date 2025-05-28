@@ -94,7 +94,6 @@ public class JdbcBookRepository implements BookRepository {
                 new String[]{"id"}
         );
 
-        //noinspection DataFlowIssue
         book.setId(keyHolder.getKeyAs(Long.class));
         return book;
     }
