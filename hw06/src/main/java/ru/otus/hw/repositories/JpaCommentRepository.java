@@ -3,7 +3,6 @@ package ru.otus.hw.repositories;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ru.otus.hw.models.Comment;
 
@@ -45,8 +44,12 @@ public class JpaCommentRepository implements CommentRepository {
 
     @Override
     public void deleteById(long id) {
-        Optional<Comment> comment = Optional.ofNullable(entityManager.find(Comment.class, id));
-        comment.ifPresent(entityManager::remove);
+        try {
+            Comment comment = entityManager.find(Comment.class, id);
+            entityManager.remove(comment);
+        } catch (NullPointerException e) {
+            throw new NullPointerException("Comment with id " + id + " not found");
+        }
     }
 
     private Comment insert(Comment comment) {
