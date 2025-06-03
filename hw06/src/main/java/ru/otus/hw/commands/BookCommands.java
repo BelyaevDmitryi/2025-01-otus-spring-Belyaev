@@ -26,9 +26,7 @@ public class BookCommands {
 
     @ShellMethod(value = "Find book by id", key = "bbid")
     public String findBookById(long id) {
-        return bookService.findById(id)
-                .map(bookConverter::bookToString)
-                .orElse("Book with id %d not found".formatted(id));
+        return bookConverter.bookToString(bookService.findById(id));
     }
 
     // bins newBook 1 1
