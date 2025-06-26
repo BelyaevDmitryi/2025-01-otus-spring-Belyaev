@@ -71,6 +71,10 @@ class BookServiceImplTest {
         var expectedBook = bookService.insert("new_book_title", authorList.get(0).getId(), genreList.get(0).getId());
         assertThat(expectedBook).isNotNull();
         assertThatCode(() -> bookConverter.bookToString(expectedBook)).doesNotThrowAnyExceptionExcept();
+        var actualBook = bookService.findById(expectedBook.getId());
+        assertThat(actualBook)
+                .usingRecursiveComparison()
+                .isEqualTo(expectedBook);
     }
 
     @DisplayName("обновляет книгу")
@@ -91,6 +95,10 @@ class BookServiceImplTest {
                 authorList.get(0).getId(), genreList.get(0).getId());
         assertThat(expectedBook).isNotNull();
         assertThatCode(() -> bookConverter.bookToString(expectedBook)).doesNotThrowAnyExceptionExcept();
+        var actualBook = bookService.findById(bookList.get(0).getId());
+        assertThat(actualBook)
+                .usingRecursiveComparison()
+                .isEqualTo(expectedBook);
     }
 
     @DisplayName("удаляет книгу")
@@ -99,7 +107,10 @@ class BookServiceImplTest {
         assertThatCode(() -> bookService.deleteById(BOOK_ID)).doesNotThrowAnyExceptionExcept();
 
         var bookList = bookService.findAll();
+        var bookDelete = bookList.get(0);
         assertThat(bookList).isNotNull().isNotEmpty();
-        assertThatCode(() -> bookService.deleteById(bookList.get(0).getId())).doesNotThrowAnyExceptionExcept();
+        assertThatCode(() -> bookService.deleteById(bookDelete.getId())).doesNotThrowAnyExceptionExcept();
+        var bookListAfterDelete = bookService.findAll();
+        assertThat(bookList).contains(bookDelete).isNotEqualTo(bookListAfterDelete);
     }
 }
