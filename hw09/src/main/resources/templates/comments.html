@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Library - comment</title>
+</head>
+<body>
+<h2>Book comments:</h2>
+
+<div class="comment-container">
+    <div class="comment-container-data" th:each="comment : ${comments}">
+        <div th:text="${comment.text}" class="comment-container-comment">comment</div>
+        <div class="comment-container-edit">
+            <a th:href="@{/comment/{id}(id=${comment.id})}" href="comment_edit.html" th:text="Edit">Edit</a>
+        </div>
+        <div class="comment-container-delete">
+            <form th:action="@{/comment/{id}/delete(id=${comment.id})}" method="post">
+                <button type="submit" class="comment-container-delete-button">Delete</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="button-container">
+    <a href="comment_edit.html" th:href="@{/comment/book/{id}/create(id=${bookId})}">
+        <button type="button" th:text="Add">Add</button>
+    </a>
+
+    <a href="books.html" th:href="@{/}">
+        <button type="button" th:text="Back">Back</button>
+    </a>
+</div>
+</body>
+</html>
