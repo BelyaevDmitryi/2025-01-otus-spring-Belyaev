@@ -8,44 +8,51 @@
 <h2>Edit book:</h2>
 
 <form id="book-edit-form" action="book_edit.html" th:action="@{/book}" th:method="post">
-    <input id="id" th:value="${book.id}" th:field="${book.id}" type="hidden"/>
+    <table>
+        <tbody>
+        <tr>
+            <input id="id" th:value="${book.id}" th:field="${book.id}" type="hidden"/>
 
-    <div class="book-edit-row" th:object="${book}">
-        <label for="book-title-input" class="book-edit-label">Title:</label>
-        <input id="book-title-input" type="text" th:value="*{title}" th:field="*{title}" value="some_title"/>
-        <div th:errorclass="error-value" th:if="${#fields.hasErrors('{title}')}" th:errors="*{title}">Wrong title</div>
-    </div>
+            <div th:object="${book}">
+                <label for="book-title-input">Title:</label>
+                <input id="book-title-input" type="text" th:value="*{title}" th:field="*{title}" value="some_title"/>
+                <div th:errorclass="error-value" th:if="${#fields.hasErrors('{title}')}" th:errors="*{title}">Wrong
+                    title
+                </div>
+            </div>
 
-    <div class="book-edit-row">
-        <label for="book-author-list" class="book-edit-label">Author:</label>
+            <label for="book-author-list">Author:</label>
 
-        <select id="book-author-list" name="author" class="book-edit-list" th:field=${book.authorId}>
-            <option th:each="aut : ${authors}"
-                    th:value="${aut.id}"
-                    th:text="${aut.fullName}"
-                    th:selected="${aut.id}==${book.authorId}">Author
-            </option>
-        </select>
-    </div>
+            <select id="book-author-list" name="author" th:field=${book.authorId}>
+                <option th:each="aut : ${authors}"
+                        th:value="${aut.id}"
+                        th:text="${aut.fullName}"
+                        th:selected="${aut.id}==${book.authorId}">Author
+                </option>
+            </select>
 
-    <div class="book-edit-row">
-        <label for="book-genre-list" class="book-edit-label">Genre:</label>
+            <label for="book-genre-list">Genre:</label>
 
-        <select id="book-genre-list" name="genre" class="book-edit-list" th:field=${book.genreId}>
-            <option th:each="genre : ${genres}"
-                    th:value="${genre.id}"
-                    th:text="${genre.name}"
-                    th:selected="${genre.id}==${book.genreId}">Genre
-            </option>
-        </select>
-    </div>
-
-    <div class="book-edit-row">
-        <button type="submit" th:text="Save">Save</button>
-        <a href="books.html" th:href="@{/}">
-            <button type="button" th:text="Cancel">Cancel</button>
-        </a>
-    </div>
+            <select id="book-genre-list" name="genre" th:field=${book.genreId}>
+                <option th:each="genre : ${genres}"
+                        th:value="${genre.id}"
+                        th:text="${genre.name}"
+                        th:selected="${genre.id}==${book.genreId}">Genre
+                </option>
+            </select>
+        </tr>
+        <tr>
+            <td>
+                <button type="submit" th:text="Save">Save</button>
+            </td>
+            <td>
+                <a href="books.html" th:href="@{/}">
+                    <button type="button" th:text="Cancel">Cancel</button>
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 </form>
 </body>
 </html>

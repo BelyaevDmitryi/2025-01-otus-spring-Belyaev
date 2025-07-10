@@ -3,21 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <title>Library</title>
+    <link type="image/x-icon" rel="shortcut icon" href="favicon.ico">
 </head>
 <body>
 <h1>Welcome to the library!</h1>
 <h2>List of books:</h2>
 
-<div class="book-container">
+<div th:if="${#lists.isEmpty(books)}">
+    К сожалению, библиотека пуста :(
+</div>
+<div th:if="${not #lists.isEmpty(books)}">
     <table>
         <thead>
         <tr>
-            <th><div th:text="Title" class="book-container-title">Title</div></th>
-            <th><div th:text="Author" class="book-container-author">Author</div></th>
-            <th><div th:text="Genre" class="book-container-genre">Genre</div></th>
-            <th><div th:text="Comment" class="book-container-comment">Comment</div></th>
-            <th><div th:text="Edit" class="book-container-edit">Edit</div></th>
-            <th><div th:text="Delete" class="book-container-delete">Delete</div></th>
+            <th>
+                <div th:text="Title">Title</div>
+            </th>
+            <th>
+                <div th:text="Author">Author</div>
+            </th>
+            <th>
+                <div th:text="Genre">Genre</div>
+            </th>
+            <th>
+                <div th:text="Comment">Comment</div>
+            </th>
+            <th>
+                <div th:text="Edit">Edit</div>
+            </th>
+            <th>
+                <div th:text="Delete">Delete</div>
+            </th>
         </tr>
         </thead>
         <tbody>
@@ -33,19 +49,23 @@
             </td>
             <td>
                 <form th:action="@{/book/{id}/delete(id=${book.id})}" method="post">
-                    <button type="submit" class="book-container-delete-button">Delete</button>
+                    <button type="submit">Delete</button>
                 </form>
             </td>
         </tr>
         </tbody>
     </table>
 </div>
-
-<div class="button-container">
-    <a th:href="@{/book}" href="book_edit.html">
-        <button type="button" th:text="Add">Add</button>
-    </a>
-</div>
-
+<table>
+    <tbody>
+    <tr>
+        <td>
+            <a th:href="@{/book}" href="book_edit.html">
+                <button type="button" th:text="Add">Add</button>
+            </a>
+        </td>
+    </tr>
+    </tbody>
+</table>
 </body>
 </html>
