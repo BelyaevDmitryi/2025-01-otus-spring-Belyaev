@@ -6,16 +6,11 @@ spring:
   sql:
     init:
       mode: always
-#      data-locations: data.sql
-#      schema-locations: schema.sql
   jpa:
     generate-ddl: false
     hibernate:
       ddl-auto: none
     show-sql: true
     open-in-view: false
-#  shell:
-#    interactive:
-#      enabled: true
 server:
   port: 9090

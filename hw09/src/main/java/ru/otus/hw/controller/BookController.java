@@ -1,5 +1,6 @@
 package ru.otus.hw.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import ru.otus.hw.dto.AuthorDto;
 import ru.otus.hw.dto.BookDto;
 import ru.otus.hw.dto.BookSaveDto;
@@ -64,21 +66,66 @@ public class BookController {
     @PostMapping(value = "/book")
     public String saveBook(@Valid @ModelAttribute("book") BookSaveDto book, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
-            List<AuthorDto> authors = authorService.findAll();
-            List<GenreDto> genres = genreService.findAll();
-            model.addAttribute("book", book);
-            model.addAttribute("authors", authors);
-            model.addAttribute("genres", genres);
-            return "book_edit";
+            return handleValidationErrors(book, model);
         }
 
-        if (book.getId() == 0) {
+        try {
             bookService.create(book);
-        } else {
-            bookService.update(book);
+            model.addAttribute("successMessage", "Book create successfully!");
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "Error creating book: " + e.getMessage());
+            return handleValidationErrors(book, model);
         }
 
         return "redirect:/";
+    }
+
+    @PostMapping(value = "/book/{id}")
+    public String updateBookPost(@PathVariable("id") Long id,
+                                 @Valid @ModelAttribute("book") BookSaveDto book,
+                                 BindingResult bindingResult, Model model,
+                                 HttpServletRequest request) {
+
+        String method = request.getParameter("_method");
+        if ("PUT".equals(method)) {
+            return updateBook(id, book, bindingResult, model);
+        }
+
+        return "redirect:/book";
+    }
+
+    @PutMapping(value = "/book/{id}")
+    public String updateBook(@PathVariable("id") Long id,
+                             @Valid @ModelAttribute("book") BookSaveDto book,
+                             BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            return handleValidationErrors(book, model);
+        }
+
+        if (!bookService.existsById(id)) {
+            model.addAttribute("errorMessage", "Book with ID " + id + " not found!");
+            return handleValidationErrors(book, model);
+        }
+
+        try {
+            book.setId(id);
+            bookService.update(book);
+            model.addAttribute("successMessage", "Book update successfully!");
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "Error updating book: " + e.getMessage());
+            return handleValidationErrors(book, model);
+        }
+
+        return "redirect:/";
+    }
+
+    private String handleValidationErrors(BookSaveDto book, Model model) {
+        List<AuthorDto> authors = authorService.findAll();
+        List<GenreDto> genres = genreService.findAll();
+        model.addAttribute("book", book);
+        model.addAttribute("authors", authors);
+        model.addAttribute("genres", genres);
+        return "book_edit";
     }
 
     @PostMapping(value = "/book/{id}/delete")

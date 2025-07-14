@@ -80,4 +80,8 @@ public class BookServiceImpl implements BookService {
         return bookRepository.findById(id).
                 orElseThrow(() -> new NotFoundException("Book with id %d not found".formatted(id)));
     }
+
+    public boolean existsById(Long id) {
+        return bookRepository.existsById(id);
+    }
 }

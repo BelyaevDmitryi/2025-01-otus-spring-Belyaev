@@ -7,7 +7,7 @@
 <body>
 <h2>Edit book:</h2>
 
-<form id="book-edit-form" action="book_edit.html" th:action="@{/book}" th:method="post">
+<form action="book_edit.html" th:action="@{${book.id != null and book.id > 0 ? '/book/' + book.id : '/book'}}" th:method="@{${book.id != null and book.id > 0 ? 'PUT' : 'POST'}}">
     <table>
         <tbody>
         <tr>

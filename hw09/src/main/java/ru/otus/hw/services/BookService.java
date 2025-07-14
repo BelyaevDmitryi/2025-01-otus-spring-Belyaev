@@ -15,4 +15,6 @@ public interface BookService {
     BookDto update(BookSaveDto bookSaveDto);
 
     void deleteById(long id);
+
+    public boolean existsById(Long id);
 }
