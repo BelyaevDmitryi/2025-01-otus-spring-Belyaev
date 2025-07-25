@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Library - comment edit</title>
+
+    <script>
+        var idParam = null;
+        var bookIdParam = null;
+
+        function fillContainer(json) {
+            var cancelLink = document.getElementById('cancel-button-link');
+            cancelLink.href = "comments.html?bookId=" + bookIdParam;
+
+            const commentInput = document.getElementById('comment-text-input');
+            commentInput.value = json.text;
+        }
+
+        async function updateCommentBook() {
+            const commentInput = document.getElementById('comment-text-input');
+
+            const comment = {text: commentInput.value, id: idParam};
+
+            fetch("/api/comment", {
+                method: 'PUT',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(comment)
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        return Promise.reject(response);
+                    }
+
+                    const cancelBtn = document.getElementById('cancel-button');
+                    cancelBtn.click();
+                })
+                .catch(error => {
+                    error.json().then((body) => {
+                        alert(body.code + ' ' + body.message);
+                    });
+                });
+        };
+
+        async function loadData() {
+            idParam = window.location.href.split("?")[1].split("&")[0].split("=")[1];
+            bookIdParam = window.location.href.split("?")[1].split("&")[1].split("=")[1];
+
+            fetch("/api/comment/" + idParam, {
+                method: 'GET',
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        return Promise.reject(response);
+                    }
+
+                    return response.json();
+                })
+                .then((json) => {
+                    fillContainer(json);
+                })
+                .catch(error => {
+                    error.json().then((body) => {
+                        console.log(body);
+                        alert(body.code + ' ' + body.message);
+                    });
+                });
+        }
+
+        window.addEventListener("load", function() {
+            loadData();
+        });
+    </script>
+</head>
+<body>
+<h2>Edit comment:</h2>
+
+<div class="comment-edit-row">
+    <label for="comment-text-input" type="hidden"></label>
+    <textarea id="comment-text-input" rows="10" type="text"></textarea>
+</div>
+
+<div class="comment-edit-row">
+    <button type="button" onclick="updateCommentBook()">Save</button>
+
+    <a id="cancel-button-link">
+        <button id="cancel-button" type="button">Cancel</button>
+    </a>
+</div>
+
+</body>
+</html>

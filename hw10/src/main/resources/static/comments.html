@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Library - comment</title>
+
+    <script>
+        var bookId = null;
+
+        function fillContainer(json) {
+            var addLink = document.getElementById('add-link-btn');
+            addLink.href = "comment_add.html?bookId=" + bookId;
+
+            const tableContainer = document.getElementById('comment-container');
+
+            while (tableContainer.firstChild) {
+                tableContainer.removeChild(tableContainer.lastChild);
+            }
+
+            json.forEach(data => {
+                let rowContainer = document.createElement('div');
+                rowContainer.classList = "comment-container-data";
+                tableContainer.appendChild(rowContainer);
+
+                let commentTextCol = document.createElement('div');
+                commentTextCol.classList = "comment-container-comment";
+                commentTextCol.innerHTML = data.text;
+
+                let editBtn = document.createElement('a');
+                let editLink = document.createTextNode("Edit");
+                editBtn.appendChild(editLink);
+                editBtn.classList = "link-button";
+                editBtn.href = "comment_edit.html?id=" + data.id + "&bookId=" + bookId;
+
+                let editCol = document.createElement('div');
+                editCol.classList = "comment-container-edit";
+                editCol.appendChild(editBtn);
+
+                let deleteCol = document.createElement('div');
+                deleteCol.classList = "comment-container-delete";
+
+                let deleteBtn = document.createElement('button');
+                deleteBtn.classList = "link-button";
+                deleteBtn.innerHTML = "Delete";
+                deleteBtn.addEventListener('click', () => {
+                    deleteComment(data.id);
+                });
+
+                deleteCol.appendChild(deleteBtn);
+
+                rowContainer.appendChild(commentTextCol);
+                rowContainer.appendChild(editCol);
+                rowContainer.appendChild(deleteCol);
+            });
+        };
+
+        async function loadData() {
+            if (!bookId) {
+                bookId = window.location.href.split("?")[1].split("=")[1];
+            }
+
+            fetch("/api/comment/book/" + bookId, {
+                method: 'GET',
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        return Promise.reject(response);
+                    }
+
+                    return response.json();
+                })
+                .then((json) => {
+                    fillContainer(json);
+                })
+                .catch(error => {
+                    error.json().then((body) => {
+                        console.log(body);
+                        alert(body.code + ' ' + body.message);
+                    });
+                });
+        };
+
+        async function deleteComment(id) {
+            fetch("/api/comment/" + id, {
+                method: 'DELETE',
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        return Promise.reject(response);
+                    }
+
+                    loadData();
+                })
+                .catch(error => {
+                    error.json().then((body) => {
+                        console.log(body);
+                        alert(body.code + ' ' + body.message);
+                    });
+                });
+        };
+
+        window.addEventListener("load", function() {
+            loadData();
+        });
+    </script>
+</head>
+<body>
+<h2>Book comments:</h2>
+
+<div id="comment-container" class="comment-container">
+</div>
+
+<div class="button-container">
+    <a id="add-link-btn">
+        <button type="button">Add</button>
+    </a>
+
+    <a href="index.html">
+        <button type="button">Back</button>
+    </a>
+</div>
+</body>
+</html>

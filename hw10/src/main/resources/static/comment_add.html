@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Library - comment add</title>
+
+    <script>
+        var bookIdParam = null;
+
+        async function createCommentBook() {
+            const commentInput = document.getElementById('comment-text-input');
+
+            const comment = {text: commentInput.value, bookId: bookIdParam};
+
+            fetch("/api/comment", {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(comment)
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        return Promise.reject(response);
+                    }
+
+                    const cancelBtn = document.getElementById('cancel-button');
+                    cancelBtn.click();
+                })
+                .catch(error => {
+                    error.json().then((body) => {
+                        alert(body.code + ' ' + body.message);
+                    });
+                });
+        };
+
+        async function loadData() {
+            if (!bookIdParam) {
+                bookIdParam = window.location.href.split("?")[1].split("=")[1];
+            }
+
+            var cancelLink = document.getElementById('cancel-button-link');
+            cancelLink.href = "comments.html?bookId=" + bookIdParam;
+        }
+
+        window.addEventListener("load", function() {
+            loadData();
+        });
+    </script>
+</head>
+<body>
+<h2>Add comment:</h2>
+
+<div class="comment-edit-row">
+    <label for="comment-text-input" type="hidden"></label>
+    <textarea id="comment-text-input" rows="10" type="text"></textarea>
+</div>
+
+<div class="comment-edit-row">
+    <button type="button" onclick="createCommentBook()">Save</button>
+
+    <a id="cancel-button-link">
+        <button id="cancel-button" type="button">Cancel</button>
+    </a>
+</div>
+
+</body>
+</html>
