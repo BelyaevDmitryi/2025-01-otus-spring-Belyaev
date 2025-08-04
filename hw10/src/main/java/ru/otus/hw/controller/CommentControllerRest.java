@@ -21,13 +21,13 @@ import java.util.List;
 public class CommentControllerRest {
     private final CommentService commentService;
 
-    @GetMapping(value = "/api/comment/book/{id}")
+    @GetMapping(value = "/api/books/{id}/comments")
     public ResponseEntity<List<CommentDto>> commentByBookId(@PathVariable("id") long id) {
         List<CommentDto> comments = commentService.findByBookId(id);
         return ResponseEntity.ok(comments);
     }
 
-    @GetMapping(value = "/api/comment/{id}")
+    @GetMapping(value = "/api/comments/{id}")
     public ResponseEntity<CommentDto> commentById(@PathVariable("id") long id) {
         return ResponseEntity.ok(commentService.findById(id));
     }

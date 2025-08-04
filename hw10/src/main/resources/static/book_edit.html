@@ -3,87 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <title>Library - book edit</title>
-
+    <script src="api-service.js"></script>
     <script>
         var editBook = null;
 
-        function fillAuthorSelectTag(json) {
-            var selectA = document.getElementById("book-author-list");
-
-            json.forEach(data => {
-                var option = document.createElement("option");
-                option.text = data.fullName;
-                option.value = data.id;
-
-                if (editBook.author.id === data.id) option.selected = true;
-
-                selectA.add(option);
-            });
-        }
-
-        function fillGenreSelectTag(json) {
-            var selectG = document.getElementById("book-genre-list");
-
-            json.forEach(data => {
-                var option = document.createElement("option");
-                option.text = data.name;
-                option.value = data.id;
-
-                if (editBook.genre.id === data.id) option.selected = true;
-
-                selectG.add(option);
-            });
-        }
-
         async function loadData() {
-            fetch("/api/author", {
-                method: 'GET',
-            })
-                .then((response) => {
-                    return response.json();
-                })
-                .then((json) => {
-                    fillAuthorSelectTag(json);
-                });
+            try {
+                const { authors, genres } = await selectService.loadReferenceData();
 
-            fetch("/api/genre", {
-                method: 'GET',
-            })
-                .then((response) => {
-                    return response.json();
-                })
-                .then((json) => {
-                    fillGenreSelectTag(json);
-                });
-        };
+                selectService.fillAuthors(document.getElementById("book-author-list"), authors, editBook.author.id);
+                selectService.fillGenres(document.getElementById("book-genre-list"), genres, editBook.genre.id);
+            } catch (error) {
+                console.error('Error loading reference ', error);
+                alert('Failed to load reference data');
+            }
+        }
 
         async function loadBook() {
-            const paramValue = window.location.href.split("?")[1].split("=")[1];
+            try {
+                const urlParams = new URLSearchParams(window.location.search);
+                const bookId = urlParams.get('id');
 
-            fetch("/api/book/" + paramValue, {
-                method: 'GET',
-            })
-                .then((response) => {
-                    if (!response.ok) {
-                        return Promise.reject(response);
-                    }
+                if (!bookId) {
+                    throw new Error('Book ID not found in URL');
+                }
 
-                    return response.json();
-                })
-                .then((json) => {
-                    editBook = json;
+                editBook = await apiService.call('getBook', { id: bookId });
 
-                    document.getElementById('id').value = json.id;
-                    document.getElementById('book-title-input').value = json.title;
-                    loadData();
-                })
-                .catch(error => {
-                    error.json().then((body) => {
-                        console.log(body);
-                        alert(body.code + ' ' + body.message);
-                    });
-                });
-        };
+                document.getElementById('id').value = editBook.id;
+                document.getElementById('book-title-input').value = editBook.title;
+                loadData();
+            } catch (error) {
+                console.log(error);
+                alert((error.code || 'Error') + ' ' + (error.message || 'Failed to load book'));
+            }
+        }
 
         async function updateBook() {
             const idInput = document.getElementById('id');
@@ -91,32 +45,22 @@
             const authorSelect = document.getElementById('book-author-list');
             const genreSelect = document.getElementById('book-genre-list');
 
-            const book = {id: idInput.value, title: titleInput.value,
-                authorId: authorSelect.value, genreId: genreSelect.value};
+            const book = {
+                id: idInput.value,
+                title: titleInput.value,
+                authorId: authorSelect.value,
+                genreId: genreSelect.value
+            };
 
-            fetch("/api/book", {
-                method: 'PUT',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(book)
-            })
-                .then((response) => {
-                    if (!response.ok) {
-                        return Promise.reject(response);
-                    }
-
-                    const cancelBtn = document.getElementById('cancel-button');
-                    cancelBtn.click();
-                })
-                .catch(error => {
-                    error.json().then((body) => {
-                        console.log(body);
-                        alert(body.code + ' ' + body.message);
-                    });
-                });
-        };
+            try {
+                await apiService.call('updateBook', {}, book);
+                const cancelBtn = document.getElementById('cancel-button');
+                cancelBtn.click();
+            } catch (error) {
+                console.log(error);
+                alert((error.code || 'Error') + ' ' + (error.message || 'Failed to update book'));
+            }
+        }
 
         window.addEventListener("load", function() {
             loadBook();
@@ -134,16 +78,12 @@
 
 <div class="book-edit-row">
     <label for="book-author-list" class="book-edit-label">Author:</label>
-
-    <select id="book-author-list" class="book-edit-list">
-    </select>
+    <select id="book-author-list" class="book-edit-list"></select>
 </div>
 
 <div class="book-edit-row">
     <label for="book-genre-list" class="book-edit-label">Genre:</label>
-
-    <select id="book-genre-list" class="book-edit-list">
-    </select>
+    <select id="book-genre-list" class="book-edit-list"></select>
 </div>
 
 <div class="book-edit-row">

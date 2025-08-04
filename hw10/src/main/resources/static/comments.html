@@ -3,21 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <title>Library - comment</title>
-
+    <script src="api-service.js"></script>
     <script>
         var bookId = null;
 
-        function fillContainer(json) {
+        function fillContainer(comments) {
             var addLink = document.getElementById('add-link-btn');
             addLink.href = "comment_add.html?bookId=" + bookId;
 
             const tableContainer = document.getElementById('comment-container');
+            domService.clearContainer(tableContainer);
 
-            while (tableContainer.firstChild) {
-                tableContainer.removeChild(tableContainer.lastChild);
-            }
-
-            json.forEach(data => {
+            comments.forEach(data => {
                 let rowContainer = document.createElement('div');
                 rowContainer.classList = "comment-container-data";
                 tableContainer.appendChild(rowContainer);
@@ -52,52 +49,29 @@
                 rowContainer.appendChild(editCol);
                 rowContainer.appendChild(deleteCol);
             });
-        };
+        }
 
         async function loadData() {
-            if (!bookId) {
-                bookId = window.location.href.split("?")[1].split("=")[1];
+            bookId = bookId || urlUtils.getQueryParam('bookId');
+
+            try {
+                const comments = await apiService.call('getCommentsByBook', { bookId: bookId });
+                fillContainer(comments);
+            } catch (error) {
+                console.log(error);
+                alert((error.code || 'Error') + ' ' + (error.message || 'Failed to load comments'));
             }
-
-            fetch("/api/comment/book/" + bookId, {
-                method: 'GET',
-            })
-                .then((response) => {
-                    if (!response.ok) {
-                        return Promise.reject(response);
-                    }
-
-                    return response.json();
-                })
-                .then((json) => {
-                    fillContainer(json);
-                })
-                .catch(error => {
-                    error.json().then((body) => {
-                        console.log(body);
-                        alert(body.code + ' ' + body.message);
-                    });
-                });
-        };
+        }
 
         async function deleteComment(id) {
-            fetch("/api/comment/" + id, {
-                method: 'DELETE',
-            })
-                .then((response) => {
-                    if (!response.ok) {
-                        return Promise.reject(response);
-                    }
-
-                    loadData();
-                })
-                .catch(error => {
-                    error.json().then((body) => {
-                        console.log(body);
-                        alert(body.code + ' ' + body.message);
-                    });
-                });
-        };
+            try {
+                await apiService.call('deleteComment', { id: id });
+                await loadData();
+            } catch (error) {
+                console.log(error);
+                alert((error.code || 'Error') + ' ' + (error.message || 'Failed to delete comment'));
+            }
+        }
 
         window.addEventListener("load", function() {
             loadData();

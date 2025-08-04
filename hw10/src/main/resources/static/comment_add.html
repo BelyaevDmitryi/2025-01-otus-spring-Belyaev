@@ -3,42 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <title>Library - comment add</title>
-
+    <script src="api-service.js"></script>
     <script>
         var bookIdParam = null;
 
         async function createCommentBook() {
             const commentInput = document.getElementById('comment-text-input');
 
-            const comment = {text: commentInput.value, bookId: bookIdParam};
+            const comment = {
+                text: commentInput.value,
+                bookId: bookIdParam
+            };
 
-            fetch("/api/comment", {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(comment)
-            })
-                .then((response) => {
-                    if (!response.ok) {
-                        return Promise.reject(response);
-                    }
-
-                    const cancelBtn = document.getElementById('cancel-button');
-                    cancelBtn.click();
-                })
-                .catch(error => {
-                    error.json().then((body) => {
-                        alert(body.code + ' ' + body.message);
-                    });
-                });
-        };
+            try {
+                await apiService.call('createComment', {}, comment);
+                const cancelBtn = document.getElementById('cancel-button');
+                cancelBtn.click();
+            } catch (error) {
+                alert((error.code || 'Error') + ' ' + (error.message || 'Failed to create comment'));
+            }
+        }
 
         async function loadData() {
-            if (!bookIdParam) {
-                bookIdParam = window.location.href.split("?")[1].split("=")[1];
-            }
+            bookIdParam = urlUtils.getQueryParam('bookId');
 
             var cancelLink = document.getElementById('cancel-button-link');
             cancelLink.href = "comments.html?bookId=" + bookIdParam;

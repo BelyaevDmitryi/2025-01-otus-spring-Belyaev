@@ -22,7 +22,7 @@ import java.util.List;
 public class BookControllerRest {
     private final BookService bookService;
 
-    @GetMapping("/api/book")
+    @GetMapping("/api/books")
     public ResponseEntity<List<BookDto>> getAllBooks() {
         return ResponseEntity.ok(bookService.findAll());
     }

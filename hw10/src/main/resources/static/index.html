@@ -4,17 +4,18 @@
     <meta charset="UTF-8">
     <title>Library</title>
     <link type="image/x-icon" rel="shortcut icon" href="favicon.ico">
-
+    <script src="api-service.js"></script>
     <script>
-        function fillContainer(json) {
+        function fillContainer(books) {
             const tableContainer = document.getElementById('main-container');
             const headerContainer = document.getElementById('header-container');
 
+            // Очищаем таблицу, оставляя только заголовок
             while (tableContainer.childNodes.length != 1 && tableContainer.lastChild != headerContainer) {
                 tableContainer.removeChild(tableContainer.lastChild);
             }
 
-            json.forEach(data => {
+            books.forEach(data => {
                 let rowContainer = document.createElement('tr');
                 rowContainer.classList = "book-container-data";
                 tableContainer.appendChild(rowContainer);
@@ -74,48 +75,27 @@
                 rowContainer.appendChild(editCol);
                 rowContainer.appendChild(deleteCol);
             });
-        };
+        }
 
         async function loadData() {
-            fetch("/api/book", {
-                method: 'GET',
-            })
-                .then((response) => {
-                    if (!response.ok) {
-                        return Promise.reject(response);
-                    }
-
-                    return response.json();
-                })
-                .then((json) => {
-                    fillContainer(json);
-                })
-                .catch(error => {
-                    error.json().then((body) => {
-                        console.log(body);
-                        alert(body.code + ' ' + body.message);
-                    });
-                });
-        };
+            try {
+                const books = await apiService.call('getBooks');
+                fillContainer(books);
+            } catch (error) {
+                console.log(error);
+                alert((error.code || 'Error') + ' ' + (error.message || 'Failed to load books'));
+            }
+        }
 
         async function deleteBook(id) {
-            fetch("/api/book/" + id, {
-                method: 'DELETE',
-            })
-                .then((response) => {
-                    if (!response.ok) {
-                        return Promise.reject(response);
-                    }
-
-                    loadData();
-                })
-                .catch(error => {
-                    error.json().then((body) => {
-                        console.log(body);
-                        alert(body.code + ' ' + body.message);
-                    });
-                });
-        };
+            try {
+                await apiService.call('deleteBook', { id: id });
+                await loadData();
+            } catch (error) {
+                console.log(error);
+                alert((error.code || 'Error') + ' ' + (error.message || 'Failed to delete book'));
+            }
+        }
 
         window.addEventListener("load", function () {
             loadData();
@@ -130,26 +110,29 @@
     <thead>
     <tr>
         <th>
-            <div th:text="Title">Title</div>
+            <div>Title</div>
         </th>
         <th>
-            <div th:text="Author">Author</div>
+            <div>Author</div>
         </th>
         <th>
-            <div th:text="Genre">Genre</div>
+            <div>Genre</div>
         </th>
         <th>
-            <div th:text="Comment">Comment</div>
+            <div>Comment</div>
         </th>
         <th>
-            <div th:text="Edit">Edit</div>
+            <div>Edit</div>
         </th>
         <th>
-            <div th:text="Delete">Delete</div>
+            <div>Delete</div>
         </th>
     </tr>
     </thead>
     <tbody id="main-container" class="book-container">
+    <tr id="header-container">
+        <!-- Заголовок таблицы -->
+    </tr>
     </tbody>
 </table>
 

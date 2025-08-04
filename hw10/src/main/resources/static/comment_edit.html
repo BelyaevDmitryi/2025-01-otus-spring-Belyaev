@@ -3,70 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <title>Library - comment edit</title>
-
+    <script src="api-service.js"></script>
     <script>
         var idParam = null;
         var bookIdParam = null;
 
-        function fillContainer(json) {
+        function fillContainer(comment) {
             var cancelLink = document.getElementById('cancel-button-link');
             cancelLink.href = "comments.html?bookId=" + bookIdParam;
 
             const commentInput = document.getElementById('comment-text-input');
-            commentInput.value = json.text;
+            commentInput.value = comment.text;
         }
 
         async function updateCommentBook() {
             const commentInput = document.getElementById('comment-text-input');
 
-            const comment = {text: commentInput.value, id: idParam};
+            const comment = {
+                text: commentInput.value,
+                id: idParam
+            };
 
-            fetch("/api/comment", {
-                method: 'PUT',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(comment)
-            })
-                .then((response) => {
-                    if (!response.ok) {
-                        return Promise.reject(response);
-                    }
-
-                    const cancelBtn = document.getElementById('cancel-button');
-                    cancelBtn.click();
-                })
-                .catch(error => {
-                    error.json().then((body) => {
-                        alert(body.code + ' ' + body.message);
-                    });
-                });
-        };
+            try {
+                await apiService.call('updateComment', {}, comment);
+                const cancelBtn = document.getElementById('cancel-button');
+                cancelBtn.click();
+            } catch (error) {
+                alert((error.code || 'Error') + ' ' + (error.message || 'Failed to update comment'));
+            }
+        }
 
         async function loadData() {
-            idParam = window.location.href.split("?")[1].split("&")[0].split("=")[1];
-            bookIdParam = window.location.href.split("?")[1].split("&")[1].split("=")[1];
+            const params = urlUtils.getAllQueryParams();
+            idParam = params.id;
+            bookIdParam = params.bookId;
 
-            fetch("/api/comment/" + idParam, {
-                method: 'GET',
-            })
-                .then((response) => {
-                    if (!response.ok) {
-                        return Promise.reject(response);
-                    }
-
-                    return response.json();
-                })
-                .then((json) => {
-                    fillContainer(json);
-                })
-                .catch(error => {
-                    error.json().then((body) => {
-                        console.log(body);
-                        alert(body.code + ' ' + body.message);
-                    });
-                });
+            try {
+                const comment = await apiService.call('getComments', { id: idParam });
+                fillContainer(comment);
+            } catch (error) {
+                console.log(error);
+                alert((error.code || 'Error') + ' ' + (error.message || 'Failed to load comment'));
+            }
         }
 
         window.addEventListener("load", function() {
