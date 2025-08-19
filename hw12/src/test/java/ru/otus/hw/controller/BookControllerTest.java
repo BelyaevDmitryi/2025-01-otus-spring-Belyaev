@@ -156,7 +156,6 @@ class BookControllerTest {
                         .param("genreId", "1")
                         .with(csrf())
                 )
-//                .andExpect(model().attributeHasFieldErrorCode("book", "title", "NotBlank"))
                 .andExpect(view().name("book_edit"));
 
         verify(bookService, times(0)).update(bookSaveDto);
