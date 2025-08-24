@@ -17,8 +17,8 @@ values
     ('lib', '$2a$13$3EBATJ0h6jFjViJVrrT4gOrmbg8Nc00h0upLTRMkSV.a9ZWyDtaqG');
 
 insert into authorities(authority)
-values ('BOOK_EDITOR'),
-       ('COMMENT_EDITOR');
+values ('ROLE_BOOK_EDITOR'),
+       ('ROLE_COMMENT_EDITOR');
 
 insert into user_authority_link(user_id, authority_id)
 values

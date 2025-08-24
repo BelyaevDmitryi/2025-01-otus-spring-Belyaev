@@ -40,7 +40,7 @@ public class User {
     @Column(name = "password")
     private String password;
 
-    @ManyToMany(fetch = FetchType.LAZY /*, cascade = CascadeType.PERSIST*/)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_authority_link", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "authority_id"))
     private List<Authority> authorityList;

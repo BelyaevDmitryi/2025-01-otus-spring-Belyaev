@@ -60,7 +60,6 @@ public class CommentController {
     }
 
     @PostMapping(value = "/comment/{id}/delete")
-//    public String deleteComment(@PathVariable("id") long id, Model model) {
     public String deleteComment(@PathVariable("id") long id) {
         CommentDto commentDto = commentService.findById(id);
         commentService.deleteById(id);

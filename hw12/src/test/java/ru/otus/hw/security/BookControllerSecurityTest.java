@@ -28,6 +28,7 @@ import java.util.stream.Stream;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrlPattern;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -93,7 +94,7 @@ public class BookControllerSecurityTest {
     @MethodSource("createTestDataForEditCreateSaveBook")
     void shouldVerifyCorrectReturnedStatusForSaveBook(String user, List<GrantedAuthority> authorityList,
                                                       int status) throws Exception {
-        var request = MockMvcRequestBuilders.post("/book");
+        var request = MockMvcRequestBuilders.post("/book").with(csrf());
 
         checkStatusAndRedirect(user, authorityList, status, request);
     }
@@ -103,7 +104,7 @@ public class BookControllerSecurityTest {
     @MethodSource("createTestDataForDeleteBook")
     void shouldVerifyCorrectReturnedStatusForDeleteBook(String user, List<GrantedAuthority> authorityList,
                                                         int status) throws Exception {
-        var request = MockMvcRequestBuilders.post("/book/1/delete");
+        var request = MockMvcRequestBuilders.post("/book/1/delete").with(csrf());
 
         checkStatusAndRedirect(user, authorityList, status, request);
     }
@@ -111,7 +112,7 @@ public class BookControllerSecurityTest {
     private void checkStatusAndRedirect(String user, List<GrantedAuthority> authorityList, int status,
                                         MockHttpServletRequestBuilder request) throws Exception {
         if (user != null) {
-            request = request.with(user(user).authorities(authorityList));
+            request = request.with(user(user).authorities(authorityList)).with(csrf());
         }
 
         ResultActions resultActions = mvc.perform(request).andExpect(status().is(status));
@@ -122,8 +123,8 @@ public class BookControllerSecurityTest {
     }
 
     public static Stream<Arguments> createTestDataForMainPage() {
-        var libUser = new User("lib", List.of(new Authority("BOOK_EDITOR")));
-        var userUser = new User("user", List.of(new Authority("COMMENT_EDITOR")));
+        var libUser = new User("lib", List.of(new Authority("ROLE_BOOK_EDITOR")));
+        var userUser = new User("user", List.of(new Authority("ROLE_COMMENT_EDITOR")));
 
         return Stream.of(
                 Arguments.of(null, null, 302),
@@ -133,8 +134,8 @@ public class BookControllerSecurityTest {
     }
 
     public static Stream<Arguments> createTestDataForEditCreateSaveBook() {
-        var libUser = new User("lib", List.of(new Authority("BOOK_EDITOR")));
-        var userUser = new User("user", List.of(new Authority("COMMENT_EDITOR")));
+        var libUser = new User("lib", List.of(new Authority("ROLE_BOOK_EDITOR")));
+        var userUser = new User("user", List.of(new Authority("ROLE_COMMENT_EDITOR")));
 
         return Stream.of(
                 Arguments.of(null, null, 302),
@@ -145,8 +146,8 @@ public class BookControllerSecurityTest {
 
 
     public static Stream<Arguments> createTestDataForDeleteBook() {
-        var libUser = new User("lib", List.of(new Authority("BOOK_EDITOR")));
-        var userUser = new User("user", List.of(new Authority("COMMENT_EDITOR")));
+        var libUser = new User("lib", List.of(new Authority("ROLE_BOOK_EDITOR")));
+        var userUser = new User("user", List.of(new Authority("ROLE_COMMENT_EDITOR")));
 
         return Stream.of(
                 Arguments.of(null, null, 302),
