@@ -20,9 +20,7 @@ public class SecurityConfiguration {
                 .sessionManagement((session) -> session
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .authorizeHttpRequests((authorize) -> authorize
-//                        .requestMatchers("/comment/book/*").authenticated()
                         .requestMatchers("/book/**").hasAuthority("ROLE_BOOK_EDITOR")
-//                        .requestMatchers("/comment/**").hasAuthority("ROLE_COMMENT_EDITOR")
                         .anyRequest().authenticated()
                 )
                 .formLogin(Customizer.withDefaults());
