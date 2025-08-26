@@ -35,4 +35,13 @@ public class CommentMapper {
         commentSaveDto.setBookId(commentDto.getBook().getId());
         return commentSaveDto;
     }
+
+    public CommentDto fromSaveDtoToDto(CommentSaveDto commentSaveDto) {
+        CommentDto commentDto = new CommentDto();
+        commentDto.setText(commentSaveDto.getText());
+        commentDto.setId(commentSaveDto.getId());
+        commentDto.setBook(new BookDto());
+        commentDto.getBook().setId(commentSaveDto.getBookId());
+        return commentDto;
+    }
 }

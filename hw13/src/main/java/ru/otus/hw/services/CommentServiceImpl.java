@@ -57,10 +57,10 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     @PreAuthorize("hasAuthority('ROLE_COMMENT_EDITOR') || hasPermission(#commentDto, 'write')")
-    public CommentDto update(CommentSaveDto commentSaveDto) {
-        var comment = commentRepository.findById(commentSaveDto.getId()).orElseThrow(()
-                -> new NotFoundException("Comment with id %d not found".formatted(commentSaveDto.getId())));
-        comment.setText(commentSaveDto.getText());
+    public CommentDto update(CommentDto commentDto) {
+        var comment = commentRepository.findById(commentDto.getId()).orElseThrow(()
+                -> new NotFoundException("Comment with id %d not found".formatted(commentDto.getId())));
+        comment.setText(commentDto.getText());
         comment = commentRepository.save(comment);
         return commentMapper.fromModel(comment);
     }
@@ -68,8 +68,8 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     @PreAuthorize("hasPermission(#commentDto, 'write')")
-    public void deleteById(long id) {
-        commentRepository.deleteById(id);
+    public void delete(CommentDto commentDto) {
+        commentRepository.deleteById(commentDto.getId());
     }
 
     private Book getBook(long bookId) {

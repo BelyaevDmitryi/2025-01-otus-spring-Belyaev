@@ -13,7 +13,7 @@ public interface CommentService {
 
     CommentDto create(CommentSaveDto commentSaveDto);
 
-    CommentDto update(CommentSaveDto commentSaveDto);
+    CommentDto update(CommentDto commentDto);
 
-    void deleteById(long id);
+    void delete(CommentDto commentDto);
 }
