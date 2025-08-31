@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Library - comment</title>
+</head>
+<body>
+<h2>Book comments:</h2>
+
+<div th:if="${#lists.isEmpty(comments)}">
+    Комментариев нет :(
+    Но вы можете быть первым!
+</div>
+<div th:if="${not #lists.isEmpty(comments)}">
+    <table>
+        <thead>
+        <tr>
+            <th>
+                <div th:text="Title">Text comments</div>
+            </th>
+            <th>
+                <div th:text="Edit">Edit</div>
+            </th>
+            <th>
+                <div th:text="Delete">Delete</div>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="comment : ${comments}">
+            <td th:text="${comment.text}"></td>
+            <td>
+                <a th:href="@{/comment/{id}(id=${comment.id})}" href="comment_edit.html" th:text="Edit">Edit</a>
+            </td>
+            <td>
+                <form th:action="@{/comment/{id}/delete(id=${comment.id})}" method="post">
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<table>
+    <tbody>
+    <tr>
+        <td>
+            <a href="comment_edit.html" th:href="@{/comment/book/{id}/create(id=${bookId})}">
+                <button type="button" th:text="Add">Add</button>
+            </a>
+        </td>
+        <td>
+            <a href="books.html" th:href="@{/}">
+                <button type="button" th:text="Back">Back</button>
+            </a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
