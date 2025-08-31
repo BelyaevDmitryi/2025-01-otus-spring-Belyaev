@@ -63,9 +63,6 @@ class BookControllerTest {
         mvc.perform(get("/").with(user("user").authorities(new SimpleGrantedAuthority("ROLE_BOOK_EDITOR"))))
                 .andExpect(view().name("books"))
                 .andExpect(model().attribute("books", bookDtoList));
-//        mvc.perform(get("/authenticated")
-//                        .with(user("user").authorities(new SimpleGrantedAuthority("BOOK_EDITOR"))))
-//                .andExpect(status().isOk());
     }
 
     @DisplayName("должен отдать страницу для редактирования книги с моделью")
