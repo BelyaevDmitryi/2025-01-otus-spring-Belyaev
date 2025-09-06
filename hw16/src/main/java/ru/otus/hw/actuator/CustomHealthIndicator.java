@@ -4,16 +4,28 @@ import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.stereotype.Component;
 
-import java.time.ZonedDateTime;
+import java.time.LocalTime;
 
 @Component
 public class CustomHealthIndicator implements HealthIndicator {
 
+    private static final LocalTime START_TIME = LocalTime.of(0, 0);
+    private static final LocalTime END_TIME = LocalTime.of(20, 0);
+
     @Override
     public Health health() {
-        return Health.up()
-                .withDetail("message", "Library is open")
-                .withDetail("time", ZonedDateTime.now())
-                .build();
+        LocalTime now = LocalTime.now();
+
+        if (now.isAfter(START_TIME) && now.isBefore(END_TIME)) {
+            return Health.up()
+                    .withDetail("time", now.toString())
+                    .withDetail("status", "Library is within operational hours.")
+                    .build();
+        } else {
+            return Health.down()
+                    .withDetail("time", now.toString())
+                    .withDetail("status", "Library is outside operational hours.")
+                    .build();
+        }
     }
 }
