@@ -1,0 +1,2 @@
+docker build -t hw-17:latest .
+docker run --name=hw-17-container -p:80:8090 --rm hw-17:latest

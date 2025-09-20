@@ -1,0 +1,383 @@
+{
+  "name": "hw10",
+  "version": "1",
+  "items": [
+    {
+      "type": "folder",
+      "name": "author",
+      "filename": "author",
+      "root": {
+        "meta": {
+          "name": "author"
+        }
+      },
+      "items": [
+        {
+          "type": "http",
+          "name": "test_get",
+          "filename": "test_get.bru",
+          "seq": 1,
+          "request": {
+            "url": "http://localhost:8090/api/author",
+            "method": "GET",
+            "headers": [],
+            "params": [],
+            "body": {
+              "mode": "none",
+              "formUrlEncoded": [],
+              "multipartForm": [],
+              "file": []
+            },
+            "script": {},
+            "vars": {},
+            "assertions": [],
+            "tests": "",
+            "docs": "",
+            "auth": {
+              "mode": "inherit"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "name": "book",
+      "filename": "book",
+      "root": {
+        "meta": {
+          "name": "book"
+        }
+      },
+      "items": [
+        {
+          "type": "http",
+          "name": "get_all",
+          "filename": "get_all.bru",
+          "seq": 1,
+          "request": {
+            "url": "http://localhost:8090/api/book",
+            "method": "GET",
+            "headers": [],
+            "params": [],
+            "body": {
+              "mode": "none",
+              "formUrlEncoded": [],
+              "multipartForm": [],
+              "file": []
+            },
+            "script": {},
+            "vars": {},
+            "assertions": [],
+            "tests": "",
+            "docs": "",
+            "auth": {
+              "mode": "inherit"
+            }
+          }
+        },
+        {
+          "type": "http",
+          "name": "get_bookById",
+          "filename": "get_bookById.bru",
+          "seq": 2,
+          "request": {
+            "url": "http://localhost:8090/api/book/2",
+            "method": "GET",
+            "headers": [],
+            "params": [],
+            "body": {
+              "mode": "none",
+              "formUrlEncoded": [],
+              "multipartForm": [],
+              "file": []
+            },
+            "script": {},
+            "vars": {},
+            "assertions": [],
+            "tests": "",
+            "docs": "",
+            "auth": {
+              "mode": "inherit"
+            }
+          }
+        },
+        {
+          "type": "http",
+          "name": "createBook",
+          "filename": "createBook.bru",
+          "seq": 3,
+          "request": {
+            "url": "http://localhost:8090/api/book",
+            "method": "POST",
+            "headers": [],
+            "params": [],
+            "body": {
+              "mode": "json",
+              "json": "{\n  \"title\": \"TitleSome\",\n  \"authorId\": 1,\n  \"genreId\": 1\n}",
+              "formUrlEncoded": [],
+              "multipartForm": [],
+              "file": []
+            },
+            "script": {},
+            "vars": {},
+            "assertions": [],
+            "tests": "",
+            "docs": "",
+            "auth": {
+              "mode": "inherit"
+            }
+          }
+        },
+        {
+          "type": "http",
+          "name": "updateBook",
+          "filename": "updateBook.bru",
+          "seq": 4,
+          "request": {
+            "url": "http://localhost:8090/api/book",
+            "method": "PUT",
+            "headers": [],
+            "params": [],
+            "body": {
+              "mode": "json",
+              "json": "{\n  \"id\": 1,\n  \"title\": \"Title Put\",\n  \"authorId\": 1,\n  \"genreId\": 1\n}",
+              "formUrlEncoded": [],
+              "multipartForm": [],
+              "file": []
+            },
+            "script": {},
+            "vars": {},
+            "assertions": [],
+            "tests": "",
+            "docs": "",
+            "auth": {
+              "mode": "inherit"
+            }
+          }
+        },
+        {
+          "type": "http",
+          "name": "deleteBook",
+          "filename": "deleteBook.bru",
+          "seq": 5,
+          "request": {
+            "url": "http://localhost:8090/api/book/1",
+            "method": "DELETE",
+            "headers": [],
+            "params": [],
+            "body": {
+              "mode": "none",
+              "formUrlEncoded": [],
+              "multipartForm": [],
+              "file": []
+            },
+            "script": {},
+            "vars": {},
+            "assertions": [],
+            "tests": "",
+            "docs": "",
+            "auth": {
+              "mode": "inherit"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "name": "comment",
+      "filename": "comment",
+      "root": {
+        "meta": {
+          "name": "comment"
+        }
+      },
+      "items": [
+        {
+          "type": "http",
+          "name": "commentByBookId",
+          "filename": "commentByBookId.bru",
+          "seq": 1,
+          "request": {
+            "url": "http://localhost:8090/api/comment/book/2",
+            "method": "GET",
+            "headers": [],
+            "params": [],
+            "body": {
+              "mode": "none",
+              "formUrlEncoded": [],
+              "multipartForm": [],
+              "file": []
+            },
+            "script": {},
+            "vars": {},
+            "assertions": [],
+            "tests": "",
+            "docs": "",
+            "auth": {
+              "mode": "inherit"
+            }
+          }
+        },
+        {
+          "type": "http",
+          "name": "commentById",
+          "filename": "commentById.bru",
+          "seq": 2,
+          "request": {
+            "url": "http://localhost:8090/api/comment/5",
+            "method": "GET",
+            "headers": [],
+            "params": [],
+            "body": {
+              "mode": "none",
+              "formUrlEncoded": [],
+              "multipartForm": [],
+              "file": []
+            },
+            "script": {},
+            "vars": {},
+            "assertions": [],
+            "tests": "",
+            "docs": "",
+            "auth": {
+              "mode": "inherit"
+            }
+          }
+        },
+        {
+          "type": "http",
+          "name": "createComment",
+          "filename": "createComment.bru",
+          "seq": 3,
+          "request": {
+            "url": "http://localhost:8090/api/comment",
+            "method": "POST",
+            "headers": [],
+            "params": [],
+            "body": {
+              "mode": "json",
+              "json": "{\n  \"id\": 5,\n  \"text\": \"comment_text_2_2\",\n  \"bookId\": 3\n}",
+              "formUrlEncoded": [],
+              "multipartForm": [],
+              "file": []
+            },
+            "script": {},
+            "vars": {},
+            "assertions": [],
+            "tests": "",
+            "docs": "",
+            "auth": {
+              "mode": "inherit"
+            }
+          }
+        },
+        {
+          "type": "http",
+          "name": "updateComment",
+          "filename": "updateComment.bru",
+          "seq": 4,
+          "request": {
+            "url": "http://localhost:8090/api/comment",
+            "method": "PUT",
+            "headers": [],
+            "params": [],
+            "body": {
+              "mode": "json",
+              "json": "{\n  \"id\": 4,\n  \"text\": \"comment_another\",\n  \"book\":1\n}",
+              "formUrlEncoded": [],
+              "multipartForm": [],
+              "file": []
+            },
+            "script": {},
+            "vars": {},
+            "assertions": [],
+            "tests": "",
+            "docs": "",
+            "auth": {
+              "mode": "inherit"
+            }
+          }
+        },
+        {
+          "type": "http",
+          "name": "deleteComment",
+          "filename": "deleteComment.bru",
+          "seq": 5,
+          "request": {
+            "url": "http://localhost:8090/api/comment/4",
+            "method": "DELETE",
+            "headers": [],
+            "params": [],
+            "body": {
+              "mode": "none",
+              "json": "{\n  \"id\": 4,\n  \"text\": \"comment_another\",\n  \"book\":1\n}",
+              "formUrlEncoded": [],
+              "multipartForm": [],
+              "file": []
+            },
+            "script": {},
+            "vars": {},
+            "assertions": [],
+            "tests": "",
+            "docs": "",
+            "auth": {
+              "mode": "inherit"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "name": "genre",
+      "filename": "genre",
+      "root": {
+        "meta": {
+          "name": "genre"
+        }
+      },
+      "items": [
+        {
+          "type": "http",
+          "name": "getAllGenre",
+          "filename": "getAllGenre.bru",
+          "seq": 1,
+          "request": {
+            "url": "http://localhost:8090/api/genre",
+            "method": "GET",
+            "headers": [],
+            "params": [],
+            "body": {
+              "mode": "none",
+              "formUrlEncoded": [],
+              "multipartForm": [],
+              "file": []
+            },
+            "script": {},
+            "vars": {},
+            "assertions": [],
+            "tests": "",
+            "docs": "",
+            "auth": {
+              "mode": "inherit"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "environments": [],
+  "brunoConfig": {
+    "version": "1",
+    "name": "hw10",
+    "type": "collection",
+    "ignore": [
+      "node_modules",
+      ".git"
+    ],
+    "size": 0.000934600830078125,
+    "filesCount": 7
+  }
+}
