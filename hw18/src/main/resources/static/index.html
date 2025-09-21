@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Library</title>
+    <link type="image/x-icon" rel="shortcut icon" href="favicon.ico">
+    <script src="api-service.js"></script>
+    <script>
+        function fillContainer(books) {
+            const tableContainer = document.getElementById('main-container');
+            const headerContainer = document.getElementById('header-container');
+
+            // Очищаем таблицу, оставляя только заголовок
+            while (tableContainer.childNodes.length != 1 && tableContainer.lastChild != headerContainer) {
+                tableContainer.removeChild(tableContainer.lastChild);
+            }
+
+            books.forEach(data => {
+                let rowContainer = document.createElement('tr');
+                rowContainer.classList = "book-container-data";
+                tableContainer.appendChild(rowContainer);
+
+                let titleCol = document.createElement('td');
+                titleCol.classList = "book-container-title";
+                titleCol.innerHTML = data.title;
+
+                let authorCol = document.createElement('td');
+                authorCol.classList = "book-container-author";
+                authorCol.innerHTML = data.author.fullName;
+
+                let genreCol = document.createElement('td');
+                genreCol.classList = "book-container-genre";
+                genreCol.innerHTML = data.genre.name;
+
+                let commentBtn = document.createElement('td');
+                let commentBtn2 = document.createElement('a');
+                let commentLink = document.createTextNode("Show");
+                commentBtn.appendChild(commentBtn2);
+                commentBtn2.appendChild(commentLink);
+                commentBtn2.classList = "link-button";
+                commentBtn2.href = "comments.html?bookId=" + data.id;
+
+                let commentCol = document.createElement('td');
+                commentCol.classList = "book-container-comment";
+                commentCol.appendChild(commentBtn2);
+
+                let editBtn = document.createElement('td');
+                let editBtn2 = document.createElement('a');
+                let editLink = document.createTextNode("Edit");
+                editBtn.appendChild(editBtn2);
+                editBtn2.appendChild(editLink);
+                editBtn2.classList = "link-button";
+                editBtn2.href = "book_edit.html?id=" + data.id;
+
+                let editCol = document.createElement('td');
+                editCol.classList = "book-container-edit";
+                editCol.appendChild(editBtn);
+
+                let deleteCol = document.createElement('td');
+                deleteCol.classList = "book-container-delete";
+
+                let deleteBtn = document.createElement('button');
+                deleteBtn.classList = "link-button";
+                deleteBtn.innerHTML = "Delete";
+                deleteBtn.addEventListener('click', () => {
+                    deleteBook(data.id);
+                });
+
+                deleteCol.appendChild(deleteBtn);
+
+                rowContainer.appendChild(titleCol);
+                rowContainer.appendChild(authorCol);
+                rowContainer.appendChild(genreCol);
+                rowContainer.appendChild(commentCol);
+                rowContainer.appendChild(editCol);
+                rowContainer.appendChild(deleteCol);
+            });
+        }
+
+        async function loadData() {
+            try {
+                const books = await apiService.call('getBooks');
+                fillContainer(books);
+            } catch (error) {
+                console.log(error);
+                alert((error.code || 'Error') + ' ' + (error.message || 'Failed to load books'));
+            }
+        }
+
+        async function deleteBook(id) {
+            try {
+                await apiService.call('deleteBook', { id: id });
+                await loadData();
+            } catch (error) {
+                console.log(error);
+                alert((error.code || 'Error') + ' ' + (error.message || 'Failed to delete book'));
+            }
+        }
+
+        window.addEventListener("load", function () {
+            loadData();
+        });
+    </script>
+</head>
+<body>
+<h1>Welcome to the library!</h1>
+<h2>List of books:</h2>
+
+<table id="table-books" class="table-books">
+    <thead>
+    <tr>
+        <th>
+            <div>Title</div>
+        </th>
+        <th>
+            <div>Author</div>
+        </th>
+        <th>
+            <div>Genre</div>
+        </th>
+        <th>
+            <div>Comment</div>
+        </th>
+        <th>
+            <div>Edit</div>
+        </th>
+        <th>
+            <div>Delete</div>
+        </th>
+    </tr>
+    </thead>
+    <tbody id="main-container" class="book-container">
+    <tr id="header-container">
+        <!-- Заголовок таблицы -->
+    </tr>
+    </tbody>
+</table>
+
+<div class="button-container">
+    <a href="book_add.html">
+        <button type="button">Add</button>
+    </a>
+</div>
+
+</body>
+</html>

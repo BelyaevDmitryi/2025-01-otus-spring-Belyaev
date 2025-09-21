@@ -1,0 +1,52 @@
+{
+  "endpoints": {
+    "getAuthors": {
+      "url": "/api/author",
+      "method": "GET"
+    },
+    "getGenres": {
+      "url": "/api/genre",
+      "method": "GET"
+    },
+    "getBooks": {
+      "url": "/api/books",
+      "method": "GET"
+    },
+    "getBook": {
+      "url": "/api/book/{id}",
+      "method": "GET"
+    },
+    "createBook": {
+      "url": "/api/book",
+      "method": "POST"
+    },
+    "updateBook": {
+      "url": "/api/book",
+      "method": "PUT"
+    },
+    "deleteBook": {
+      "url": "/api/book/{id}",
+      "method": "DELETE"
+    },
+    "getCommentsByBook": {
+      "url": "/api/books/{bookId}/comments",
+      "method": "GET"
+    },
+    "getComments": {
+      "url": "/api/comments/{id}",
+      "method": "GET"
+    },
+    "createComment": {
+      "url": "/api/comment",
+      "method": "POST"
+    },
+    "updateComment": {
+      "url": "/api/comment",
+      "method": "PUT"
+    },
+    "deleteComment": {
+      "url": "/api/comment/{id}",
+      "method": "DELETE"
+    }
+  }
+}
