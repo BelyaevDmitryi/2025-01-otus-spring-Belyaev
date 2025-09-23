@@ -1,0 +1,371 @@
+{
+  "info": {
+    "name": "hw10",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "author",
+      "item": [
+        {
+          "name": "test_get",
+          "event": [],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "http://localhost:8090/api/author",
+              "protocol": "http",
+              "host": [
+                "localhost:8090"
+              ],
+              "path": [
+                "api",
+                "author"
+              ],
+              "query": [],
+              "variable": []
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "book",
+      "item": [
+        {
+          "name": "get_all",
+          "event": [],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "http://localhost:8090/api/book",
+              "protocol": "http",
+              "host": [
+                "localhost:8090"
+              ],
+              "path": [
+                "api",
+                "book"
+              ],
+              "query": [],
+              "variable": []
+            }
+          }
+        },
+        {
+          "name": "get_bookById",
+          "event": [],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "http://localhost:8090/api/book/2",
+              "protocol": "http",
+              "host": [
+                "localhost:8090"
+              ],
+              "path": [
+                "api",
+                "book",
+                "2"
+              ],
+              "query": [],
+              "variable": []
+            }
+          }
+        },
+        {
+          "name": "createBook",
+          "event": [],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "http://localhost:8090/api/book",
+              "protocol": "http",
+              "host": [
+                "localhost:8090"
+              ],
+              "path": [
+                "api",
+                "book"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"TitleSome\",\n  \"authorId\": 1,\n  \"genreId\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "updateBook",
+          "event": [],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "http://localhost:8090/api/book",
+              "protocol": "http",
+              "host": [
+                "localhost:8090"
+              ],
+              "path": [
+                "api",
+                "book"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": 1,\n  \"title\": \"Title Put\",\n  \"authorId\": 1,\n  \"genreId\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "deleteBook",
+          "event": [],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "http://localhost:8090/api/book/1",
+              "protocol": "http",
+              "host": [
+                "localhost:8090"
+              ],
+              "path": [
+                "api",
+                "book",
+                "1"
+              ],
+              "query": [],
+              "variable": []
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "comment",
+      "item": [
+        {
+          "name": "commentByBookId",
+          "event": [],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "http://localhost:8090/api/comment/book/2",
+              "protocol": "http",
+              "host": [
+                "localhost:8090"
+              ],
+              "path": [
+                "api",
+                "comment",
+                "book",
+                "2"
+              ],
+              "query": [],
+              "variable": []
+            }
+          }
+        },
+        {
+          "name": "commentById",
+          "event": [],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "http://localhost:8090/api/comment/5",
+              "protocol": "http",
+              "host": [
+                "localhost:8090"
+              ],
+              "path": [
+                "api",
+                "comment",
+                "5"
+              ],
+              "query": [],
+              "variable": []
+            }
+          }
+        },
+        {
+          "name": "createComment",
+          "event": [],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "http://localhost:8090/api/comment",
+              "protocol": "http",
+              "host": [
+                "localhost:8090"
+              ],
+              "path": [
+                "api",
+                "comment"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": 5,\n  \"text\": \"comment_text_2_2\",\n  \"bookId\": 3\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "updateComment",
+          "event": [],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "http://localhost:8090/api/comment",
+              "protocol": "http",
+              "host": [
+                "localhost:8090"
+              ],
+              "path": [
+                "api",
+                "comment"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": 4,\n  \"text\": \"comment_another\",\n  \"book\":1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "deleteComment",
+          "event": [],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "http://localhost:8090/api/comment/4",
+              "protocol": "http",
+              "host": [
+                "localhost:8090"
+              ],
+              "path": [
+                "api",
+                "comment",
+                "4"
+              ],
+              "query": [],
+              "variable": []
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "genre",
+      "item": [
+        {
+          "name": "getAllGenre",
+          "event": [],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "http://localhost:8090/api/genre",
+              "protocol": "http",
+              "host": [
+                "localhost:8090"
+              ],
+              "path": [
+                "api",
+                "genre"
+              ],
+              "query": [],
+              "variable": []
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": []
+}
