@@ -49,7 +49,7 @@ class BookControllerRestTest {
 
         when(bookService.findAll()).thenReturn(bookDtoList);
 
-        mvc.perform(get("/api/book"))
+        mvc.perform(get("/api/books"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(bookDtoList)));
     }

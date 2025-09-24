@@ -47,7 +47,7 @@ class CommentControllerRestTest {
 
         when(commentService.findByBookId(1)).thenReturn(commentDtoList);
 
-        mvc.perform(get("/api/comment/book/1"))
+        mvc.perform(get("/api/books/1/comments"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(commentDtoList)));
     }
@@ -60,7 +60,7 @@ class CommentControllerRestTest {
 
         when(commentService.findById(1)).thenReturn(commentDto);
 
-        mvc.perform(get("/api/comment/1"))
+        mvc.perform(get("/api/comments/1"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(commentDto)));
     }
