@@ -1,0 +1,2 @@
+docker build -t hw-18-image:latest .
+docker run --name=hw-18-container -p:80:8090 --rm hw-18-image:latest

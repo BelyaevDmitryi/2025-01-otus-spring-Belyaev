@@ -1,0 +1,31 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:maindb
+  sql:
+    init:
+      mode: always
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    open-in-view: false
+server:
+  port: 8090
+
+storage-book:
+  url: http://localhost:8090
+
+resilience4j:
+  timelimiter:
+    configs:
+      default:
+        timeoutDuration: 700ms
+  retry:
+    configs:
+      default:
+        maxAttempts: 3
+        waitDuration: 50ms
+        retryExceptions:
+          - org.springframework.web.client.HttpServerErrorException
+          - java.lang.RuntimeException
