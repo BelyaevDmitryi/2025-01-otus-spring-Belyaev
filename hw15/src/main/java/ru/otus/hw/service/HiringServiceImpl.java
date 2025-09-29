@@ -1,7 +1,5 @@
 package ru.otus.hw.service;
 
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.integration.support.MessageBuilder;
@@ -38,6 +36,7 @@ public class HiringServiceImpl implements HiringService {
 
     @Override
     public void submitMultipleCandidates() {
+        counter = 3;
         for (int i = 1; i <= counter; i++) {
             int qualLevel = 1 + random.nextInt(5); // От 1 до 5
             Candidate candidate = new Candidate("cand" + String.format("%03d", i), qualLevel);

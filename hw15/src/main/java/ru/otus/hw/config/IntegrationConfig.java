@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.concurrent.Executors;
 
 @Configuration
-public class HiringIntegrationConfig {
+public class IntegrationConfig {
 
     @Bean
     public HiringStatistics hiringStatistics() {
@@ -64,12 +64,12 @@ public class HiringIntegrationConfig {
     // Основной поток: HR интервью -> фильтр -> техническое интервью
     @Bean
     public IntegrationFlow hiringFlow(HiringService hiringService) {
-        return IntegrationFlow.from("hrInterviewChannel")
+        return IntegrationFlow.from(hrInterviewChannel())
                 .handle(hiringService, "processHrInterview")
                 .<Candidate, Boolean>route(
                         Candidate::isPassedHr,
                         mapping -> mapping
-                                .subFlowMapping(true, sf -> sf.channel("technicalInterviewChannel"))
+                                .subFlowMapping(true, sf -> sf.channel(technicalInterviewChannel()))
                                 .subFlowMapping(false, sf -> sf.handle(m -> {
                                     Candidate c = (Candidate) m.getPayload();
                                     System.out.println("Кандидат " + c.getId() + " отклонен на HR этапе");
@@ -81,17 +81,17 @@ public class HiringIntegrationConfig {
     // Поток технического интервью: split на интервьюеров, обработка каждого, отправка результатов
     @Bean
     public IntegrationFlow technicalInterviewFlow(HiringService hiringService) {
-        return IntegrationFlow.from("technicalInterviewChannel")
+        return IntegrationFlow.from(technicalInterviewChannel())
                 .split(Candidate.class, InterviewUtils::createInterviewRequests)
                 .handle(hiringService, "processTechnicalInterview")
-                .channel("technicalResultsChannel")
+                .channel(technicalResultsChannel())
                 .get();
     }
 
     // Агрегатор: собираем результаты для каждого кандидата, ждем всех оценок
     @Bean
     public IntegrationFlow aggregateResultsFlow(HiringService hiringService) {
-        return IntegrationFlow.from("technicalResultsChannel")
+        return IntegrationFlow.from(technicalResultsChannel())
                 .aggregate(agg -> agg
                         .correlationStrategy(m -> ((TechnicalInterviewResult) m.getPayload()).getCandidateId())
                         .releaseStrategy(g -> g.size() == expectedInterviewersCount())
