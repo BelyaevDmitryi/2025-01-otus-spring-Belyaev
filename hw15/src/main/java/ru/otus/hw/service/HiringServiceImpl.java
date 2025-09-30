@@ -81,7 +81,6 @@ public class HiringServiceImpl implements HiringService {
             worker.setStatus("Принят");
             worker.setSupervisor(supervisor);
             hiringStatistics.incrementAccepted();
-            // сохранить worker в БД, если нужно
             return worker;
         } else {
             hiringStatistics.incrementTechnicalRejected();
