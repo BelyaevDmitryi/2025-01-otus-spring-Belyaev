@@ -36,17 +36,13 @@ class HiringIntegrationFlowTest {
 
     @Test
     void hiringFlowProcessesCandidatesCorrectly() throws Exception {
-        // Отправляем кандидатов
         hiringService.submitMultipleCandidates();
 
-        // Проверяем статистику после первичного фильтра
-        Thread.sleep(1000); // ждем потоков
+        Thread.sleep(1000);
 
-        // Проверяем что отклоненные по HR попали в статистику
         int rejectedHr = hiringStatistics.getHrRejected();
         assertThat(rejectedHr).isBetween(0, 3);
 
-        // Извлекаем результаты технического интервью из channel
         int receivedResults = 0;
         for (int i = 0; i < 20; i++) {
             Message<?> message = technicalResultsChannel.receive(500);
@@ -55,11 +51,10 @@ class HiringIntegrationFlowTest {
             assertThat(payload).isInstanceOf(TechnicalInterviewResult.class);
             receivedResults++;
         }
-        // Должны быть результаты технического интервью для прошедших кандидатов
+
         assertThat(receivedResults)
                 .isGreaterThanOrEqualTo(0);
 
-        // Проверяем итоговую статистику
         String report = hiringService.getStatisticsReport();
         assertThat(report)
                 .contains("Statistics{HR rejected=")
@@ -69,12 +64,10 @@ class HiringIntegrationFlowTest {
 
     @Test
     void processHrInterviewShouldFilterCorrectly() {
-        // Кандидат с низкой квалификацией
         Candidate low = new Candidate("candLow", 2);
         hiringService.processHrInterview(low);
         assertThat(low.isPassedHr()).isFalse();
 
-        // Кандидат с высокой квалификацией
         Candidate high = new Candidate("candHigh", 4);
         hiringService.processHrInterview(high);
         assertThat(high.isPassedHr()).isTrue();

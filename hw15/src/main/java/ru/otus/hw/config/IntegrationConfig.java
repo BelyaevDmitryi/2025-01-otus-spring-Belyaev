@@ -56,7 +56,7 @@ public class IntegrationConfig {
         return MessageChannels.queue();
     }
 
-    @Bean("statisticsChannel")
+    @Bean
     public MessageChannel statisticsChannel() {
         return MessageChannels.queue().getObject();
     }
